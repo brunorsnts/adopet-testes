@@ -1,10 +1,9 @@
 package br.com.alura.adopet.api.service;
 
+import br.com.alura.adopet.api.dto.AprovacaoAdocaoDto;
+import br.com.alura.adopet.api.dto.ReprovacaoAdocaoDto;
 import br.com.alura.adopet.api.dto.SolicitacaoAdocaoDto;
-import br.com.alura.adopet.api.model.Abrigo;
-import br.com.alura.adopet.api.model.Adocao;
-import br.com.alura.adopet.api.model.Pet;
-import br.com.alura.adopet.api.model.Tutor;
+import br.com.alura.adopet.api.model.*;
 import br.com.alura.adopet.api.repository.AdocaoRepository;
 import br.com.alura.adopet.api.repository.PetRepository;
 import br.com.alura.adopet.api.repository.TutorRepository;
@@ -18,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -99,5 +99,38 @@ class AdocaoServiceTest {
         //ASSERT
         then(validador1).should().validar(dto);
         then(validador2).should().validar(dto);
+    }
+
+    @Test
+    void deveriaMarcarOStatusDaAdocaoComoAprovada() {
+
+        //ARRANGE
+        Adocao adocao = new Adocao(tutor, pet, "motivo qualquer");
+        AprovacaoAdocaoDto aprovacaoAdocaoDto = new AprovacaoAdocaoDto(1L);
+        given(adocaoRepository.getReferenceById(any())).willReturn(adocao);
+        given(pet.getAbrigo()).willReturn(abrigo);
+
+        //ACT
+        service.aprovar(aprovacaoAdocaoDto);
+
+        //ASSERT
+        Assertions.assertEquals(StatusAdocao.APROVADO,adocao.getStatus());
+    }
+
+    @Test
+    void deveriaMarcarOStatusDaAdocaoComoReprovada() {
+
+        //ARRANGE
+        Adocao adocao = new Adocao(tutor, pet, "motivo qualquer");
+        ReprovacaoAdocaoDto reprovacaoAdocaoDto = new ReprovacaoAdocaoDto(1L, "Justificativa qualquer");
+        given(adocaoRepository.getReferenceById(any())).willReturn(adocao);
+        given(pet.getAbrigo()).willReturn(abrigo);
+
+        //ACT
+        service.reprovar(reprovacaoAdocaoDto);
+
+        //ASSERT
+        Assertions.assertEquals(StatusAdocao.REPROVADO,adocao.getStatus());
+        Assertions.assertEquals(reprovacaoAdocaoDto.justificativa(), adocao.getJustificativaStatus());
     }
 }
