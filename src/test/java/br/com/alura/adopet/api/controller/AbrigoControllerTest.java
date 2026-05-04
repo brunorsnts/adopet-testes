@@ -1,6 +1,5 @@
 package br.com.alura.adopet.api.controller;
 
-import br.com.alura.adopet.api.dto.CadastroPetDto;
 import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Abrigo;
 import br.com.alura.adopet.api.service.AbrigoService;
@@ -8,7 +7,6 @@ import br.com.alura.adopet.api.service.PetService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
